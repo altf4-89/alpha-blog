@@ -45,7 +45,13 @@ class ArticlesController < ApplicationController
     private
 
     def article_id
-        @article = Article.find(params[:id])
+        begin(Article.find(params[:id]))
+            @article=Article.find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+            flash[:alert] = "Requested Article does not exist."
+            redirect_to new_article_path
+        end
+
     end
 
     def ex_params
